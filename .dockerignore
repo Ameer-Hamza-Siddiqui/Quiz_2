@@ -1,0 +1,20 @@
+# Lightweight base image
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /app
+
+# 1. Copy only dependency files first (CACHE LAYER)
+COPY package*.json ./
+
+# 2. Install dependencies (cached unless package.json changes)
+RUN npm install --production
+
+# 3. Copy rest of the application code
+COPY . .
+
+# Expose app port
+EXPOSE 3000
+
+# Start application
+CMD ["npm", "start"]
